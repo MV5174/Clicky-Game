@@ -1,7 +1,8 @@
 import React from 'react';
 import Navbar from "./components/Navbar/navbar";
 import Header from "./components/Header/header";
-import Game from "./components/Gamediv/game"
+import Game from "./components/Gamediv/game";
+import Footer from "./components/Footer/footer";
 
 function App() {
   return (
@@ -9,6 +10,7 @@ function App() {
       <Navbar />
       <Header />
       <Game />
+      <Footer />
     </div>
   );
 }

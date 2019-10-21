@@ -1,4 +1,9 @@
+body {
+    background-color: #7FAD71;
+}
+
 .gameDiv {
-    height: 1000px;
-    background-color: aquamarine;
+    height: 600px;
+    width: 50%;
+    margin: auto;
 }
