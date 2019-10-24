@@ -4,7 +4,7 @@ import "./footer.css";
 function Footer() {
     return (
         <footer class="bg-primary">
-            <h1 class="footerText">Footer</h1>
+            <h1 class="footerText">Clicky Game</h1>
         </footer>
     );
 }

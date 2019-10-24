@@ -10,6 +10,8 @@ class Game extends React.Component {
         pokemon,
         score: 0,
         highScore: 0,
+        message: "Click an image to begin!",
+        activeness: false
     }
 
     componentDidMount() {
@@ -72,40 +74,59 @@ class Game extends React.Component {
             // console.log(pokemon)
         } else {
             this.handleIncorrect();
-            
-            this.setState({})
         }
     }
 
     handleCorrect = () => {
 
         this.setState({ score: this.state.score + 1 })
-        if (this.state.score > this.state.highScore) {
-            this.setState({ highScore: this.state.highScore + 1 })
-        }
         this.setState({ pokemon: this.randomizeArr(this.state.pokemon) })
+        this.setState({message: "Good Job!"})
+        this.handleHighScore();
         console.log(this.state.score);
         console.log(this.state.highScore)
         console.log("correct");
 
     }
 
+    handleHighScore() {
+        if (this.state.score > this.state.highScore) {
+            this.setState({ highScore: this.state.highScore + 1 })
+        }
+    }
+
     handleIncorrect() {
 
         this.setState({ score: 0 })
+        this.setState({message: "Sorry that was the wrong guess, try again!"})
         console.log(this.state.highScore)
-        // this.setState({ pokemon: this.randomizeArr(this.state.pokemon) })
+        const newPokemon = this.state.pokemon.map(thisPokemon => {
+            thisPokemon.clicked = false;
+            console.log(thisPokemon.clicked);
+            return thisPokemon;
+        })
+        this.setState({ pokemon: newPokemon })
+        this.setState({ pokemon: this.randomizeArr(this.state.pokemon) })
+        this.shake();
         console.log("Incorrect");
+    }
+
+    shake = () => {
+        this.setState({activeness: true});
+        setTimeout(function(){
+            this.setState({activeness: false});
+       }.bind(this),200);
     }
 
     render() {
         return (
             <div>
-            <Navbar 
+            <Navbar
+            message={this.state.message} 
             score={this.state.score}
             highScore={this.state.highScore}/>
             <Header />
-            <div class="gameDiv">
+            <div class="gameDiv" className={"gameDiv" + (this.state.activeness? "-active":"")}>
                 {this.state.pokemon.map(pokemon => (
                     <Card
                         id={pokemon.id}
