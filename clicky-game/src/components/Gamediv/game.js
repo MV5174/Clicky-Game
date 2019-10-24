@@ -2,6 +2,8 @@ import React from "react";
 import "./game.css";
 import Card from "../Card/card";
 import pokemon from "../../pokemon.json"
+import Navbar from "../Navbar/navbar";
+import Header from "../Header/header";
 
 class Game extends React.Component {
     state = {
@@ -12,8 +14,14 @@ class Game extends React.Component {
 
     componentDidMount() {
         this.setState({
-            pokemon: this.randomizeArr(this.state.pokemon.map(thisPokemon => {
+            pokemon: this.state.pokemon.map(thisPokemon => {
                 thisPokemon.clicked = false;
+                return thisPokemon;
+            }
+            )
+        })
+        this.setState({
+            pokemon: this.randomizeArr(this.state.pokemon.map(thisPokemon => {
                 return thisPokemon;
             }
             ))
@@ -42,56 +50,62 @@ class Game extends React.Component {
 
     targetCard = event => {
         const thisId = event.target.getAttribute("data-id");
-        // console.log(thisId);
+        console.log("id of this pokemon: " + thisId);
+        // console.log(pokemon)
+        // console.log(this.state.pokemon.filter(thisPokemon => thisPokemon.id == thisId)[0].clicked)
 
-        if (!this.state.pokemon.clicked) {
-            console.log(this.state.pokemon.clicked)
+        if (this.state.pokemon.filter(thisPokemon => thisPokemon.id == thisId)[0].clicked === false) {
+            // debugger;
+            // console.log(this.state.pokemon[thisId].clicked)
             this.handleCorrect();
             const newPokemon = this.state.pokemon.map(thisPokemon => {
                 if (parseInt(thisPokemon.id) === parseInt(thisId)) {
                     console.log("it worked")
                     thisPokemon.clicked = true;
-                    console.log(thisPokemon.clicked)
+                    // console.log(thisPokemon.clicked)
                 }
-                
+
                 return thisPokemon;
             })
-            console.log(newPokemon);
+            // console.log(newPokemon);
             this.setState({ pokemon: newPokemon })
+            // console.log(pokemon)
         } else {
             this.handleIncorrect();
+            
             this.setState({})
         }
     }
 
-    handleCorrect = event => {
+    handleCorrect = () => {
 
-
-        // if (!event.target.clicked) {
-        //     this.setState({clicked: true})
-        //     this.setState({ score: this.state.score + 1 })
-        //     if (this.state.score > this.state.highScore) {
-        //         this.setState({ highScore: this.state.highScore + 1 })
-        //     }
-        //     this.setState({ pokemon: this.randomizeArr(this.state.pokemon) })
-        // } else {
-        //     this.handleIncorrect();
-        // }
+        this.setState({ score: this.state.score + 1 })
+        if (this.state.score > this.state.highScore) {
+            this.setState({ highScore: this.state.highScore + 1 })
+        }
+        this.setState({ pokemon: this.randomizeArr(this.state.pokemon) })
+        console.log(this.state.score);
+        console.log(this.state.highScore)
         console.log("correct");
 
     }
 
     handleIncorrect() {
 
-        // this.setState({ score: 0 })
+        this.setState({ score: 0 })
+        console.log(this.state.highScore)
         // this.setState({ pokemon: this.randomizeArr(this.state.pokemon) })
         console.log("Incorrect");
     }
 
     render() {
         return (
+            <div>
+            <Navbar 
+            score={this.state.score}
+            highScore={this.state.highScore}/>
+            <Header />
             <div class="gameDiv">
-                {this.setArr}
                 {this.state.pokemon.map(pokemon => (
                     <Card
                         id={pokemon.id}
@@ -101,6 +115,7 @@ class Game extends React.Component {
                         onClick={this.targetCard}
                     />
                 ))}
+            </div>
             </div>
         );
     }
